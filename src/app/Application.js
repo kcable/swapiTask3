@@ -38,6 +38,7 @@ export default class Application extends EventEmitter {
     await this.data.universe.init();
     console.log(this.data.universe.starships);
     console.log(this.data.universe.theBestStarship);
+    
     this.emit(Application.events.APP_READY);
   }
 }
