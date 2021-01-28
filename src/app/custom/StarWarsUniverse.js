@@ -16,22 +16,22 @@ export default class StarWarsUniverse {
     const sumArr = [];
     let pages = count % 10 === 0 ? count / 10 : Math.floor(count / 10 + 1); // if count is not a number divisible by 10 add one more page
     // retriveing data from api
-    for (let i = 1; i <= pages; i++) {
-      const { results } = await (
-        await fetch(`https://swapi.dev/api/starships/?page=${i}`)
+    for (let i = 1; i <= 36; i++) {
+      const result = await (
+        await fetch(`https://swapi.dev/api/starships/${i}/`)
       ).json();
-      sumArr.push(...results);
-    }
-    // creating starships
-    sumArr.forEach((e) => {
-      const { consumables, passengers, name } = e;
+      if (result.detail) {
+        continue;
+      }
+      const { consumables, passengers, name } = result;
+      // creating starships
       let validationResult = this._validateData(consumables, passengers);
       if (validationResult.length == 2) {
         this.starships.push(
           new Starship(name, validationResult[0], validationResult[1])
         );
       }
-    });
+    }
   }
   /**
    *
@@ -49,7 +49,6 @@ export default class StarWarsUniverse {
       passengers !== undefined &&
       passengers !== null &&
       passengers !== "n/a" &&
-      passengers !== "unknown" &&
       passengers !== "0"
     ) {
       // validation passes now to parse the data
